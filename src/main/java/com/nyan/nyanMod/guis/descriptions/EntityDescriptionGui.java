@@ -30,7 +30,7 @@ public class EntityDescriptionGui extends LightweightGuiDescription {
         entityHealth = new WLabel("null");
         switch(type){
             case("player"):
-                eName = ((PlayerEntity)currEntity).getDisplayName().asString();
+                eName = ((PlayerEntity)currEntity).getName().toString().split("\'")[1];
                 entityHealth.setText(new LiteralText(""));
                 entityHealthD = new WDynamicLabel(()->"Health: "+(((PlayerEntity) currEntity).getHealth()));
                 root.add(entityHealthD,0,6);
@@ -49,7 +49,7 @@ public class EntityDescriptionGui extends LightweightGuiDescription {
 
         //entityCoords.setText("Coordinates: "+(int)currEntity1.getPos().x+" "+(int)currEntity1.getPos().y+" "+(int)currEntity1.getPos().z);
 
-        if(currEntity instanceof MobEntity && ! (currEntity instanceof PlayerEntity)){
+        if(currEntity instanceof MobEntity ){
             entityHealth.setText(new LiteralText(""));
             entityHealthD = new WDynamicLabel(()->"Health: "+(((MobEntity) currEntity).getHealth()));
             root.add(entityHealthD,0,6);
@@ -68,7 +68,6 @@ public class EntityDescriptionGui extends LightweightGuiDescription {
         exitButton.setOnClick(this::ExitButtonExit);
     }
     private void ExitButtonExit(){
-        System.out.println("pressed!");
         MinecraftClient.getInstance().currentScreen.onClose();
         MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new EntityShowerGui())));
     }

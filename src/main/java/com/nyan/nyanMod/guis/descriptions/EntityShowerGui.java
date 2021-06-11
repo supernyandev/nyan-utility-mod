@@ -71,7 +71,6 @@ public class EntityShowerGui extends LightweightGuiDescription {
 
 
     private void ExitButtonExit(){
-        System.out.println("pressed!");
         MinecraftClient.getInstance().currentScreen.onClose();
         MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new MainGui())));
     }

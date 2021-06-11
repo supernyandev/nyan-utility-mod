@@ -4,7 +4,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
@@ -71,12 +73,21 @@ public class DataAssembler {
         for(Entity currEntity: client.world.getEntities()){
             String ans = "";
             ans+=""+client.player.getPos().distanceTo(currEntity.getPos())+" ";
-            ans+=currEntity.getType().toString().substring(17,currEntity.getType().toString().length())+" ";
-
+            String type = currEntity.getType().toString().substring(17,currEntity.getType().toString().length());
+            switch(type){
+                case("player"):
+                    type = ((PlayerEntity)currEntity).getName().toString().split("\'")[1];
+                    break;
+                case("item"):
+                    type = ((ItemEntity)currEntity).toString().split("\'")[1]+((ItemEntity) currEntity).getStack().getCount();
+            }
+            ans += type+" ";
             ans+=(int)currEntity.getPos().x+" "+(int)currEntity.getPos().y+" "+(int)currEntity.getPos().z+" "+currEntity.getEntityId();
             if(currEntity instanceof  MobEntity){
-
                 ans+=" "+ ((MobEntity) currEntity).getHealth();
+            }
+            if(currEntity instanceof PlayerEntity){
+                ans+=" "+ ((PlayerEntity) currEntity).getHealth();
             }
             returned.add(ans);
 
