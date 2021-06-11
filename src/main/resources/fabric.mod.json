@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "nmod",
+  "version": "${version}",
+
+  "name": "Nyan Mod",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/nmod/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.nyan.nyanMod.Mod"
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
