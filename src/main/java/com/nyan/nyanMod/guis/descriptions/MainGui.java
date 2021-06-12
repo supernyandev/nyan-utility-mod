@@ -35,7 +35,7 @@ public class MainGui extends LightweightGuiDescription {
         buttonEntity.setLabel(new LiteralText("Entity"));
         buttonBlock.setLabel(new LiteralText("Block"));
         buttonBlock.setSize(3*18,17);
-        buttonEntity.setOnClick(()->onButtonShowPressed(new EntityShowerGui()));
+        buttonEntity.setOnClick(()->onButtonShowPressed(new EntityShowerGui("all")));
         buttonBlock.setOnClick(()->onButtonShowPressed(new BlockShowerGui()));
 
     }

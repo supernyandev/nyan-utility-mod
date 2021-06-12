@@ -10,6 +10,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.LiteralText;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
 public class BlockShowerGui extends LightweightGuiDescription {
@@ -20,8 +21,10 @@ public class BlockShowerGui extends LightweightGuiDescription {
     private WButton exitButton;
     private WLabel errorLabel;
     private WTextField lightField;
+    private WLabel countLabel;
     public BlockShowerGui(){
         root  = new WGridPanel();
+        countLabel = new WLabel("");
         root.setSize(300,200);
         lightField = new WTextField();
         textField = new WTextField();
@@ -41,11 +44,13 @@ public class BlockShowerGui extends LightweightGuiDescription {
             destination.cost.setText(new LiteralText(""));
 
         };
-
-        list = new WListPanel<>(DataAssembler.blockData(MinecraftClient.getInstance(),28,7), Plain::new, configurator);
+        ArrayList<String> listString = DataAssembler.blockData(MinecraftClient.getInstance(),28,7);
+        int count = listString.size();
+        list = new WListPanel<>(listString, Plain::new, configurator);
         list.setListItemHeight(18);
         list.setHost(this);
         list.layout();
+        countLabel.setText(new LiteralText("Count:"+count));
 
         setRootPanel(root);
         root.add(list, 0, 2, 12, 6);
@@ -54,6 +59,7 @@ public class BlockShowerGui extends LightweightGuiDescription {
         root.add(textField, 1,9);
         root.add(exitButton,0,0);
         root.add(errorLabel,1,11);
+        root.add(countLabel,1,11);
 
         textField.setSize(30,30);
         lightField.setSize(30,10);
@@ -76,9 +82,12 @@ public class BlockShowerGui extends LightweightGuiDescription {
             destination.cost.setText(new LiteralText(""));
 
         };
-        list = new WListPanel<>(DataAssembler.blockData(MinecraftClient.getInstance(),distance,light), Plain::new, configurator);
+        ArrayList<String> listString = DataAssembler.blockData(MinecraftClient.getInstance(),distance,light);
+        int count = listString.size();
+        list = new WListPanel<>(listString, Plain::new, configurator);
         list.setHost(this);
         list.setListItemHeight(18);
+        countLabel.setText(new LiteralText("Count:"+count));
         root.add(list, 0, 2, 12, 6);
         list.layout();
         errorLabel.setText(new LiteralText(""));}

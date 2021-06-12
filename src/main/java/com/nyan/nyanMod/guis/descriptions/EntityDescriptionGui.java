@@ -69,6 +69,6 @@ public class EntityDescriptionGui extends LightweightGuiDescription {
     }
     private void ExitButtonExit(){
         MinecraftClient.getInstance().currentScreen.onClose();
-        MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new EntityShowerGui())));
+        MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new EntityShowerGui("all"))));
     }
 }

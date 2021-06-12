@@ -6,6 +6,9 @@ import com.nyan.nyanMod.guis.descriptions.MainGui;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.block.PlantBlock;
+import net.minecraft.block.SnowBlock;
+import net.minecraft.block.SnowyBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.ZombieEntity;
@@ -28,6 +31,7 @@ public class Mod implements ModInitializer {
 
         MinecraftClient.getInstance().currentScreen.onClose();
         MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new MainGui())));
+        System.out.println(MinecraftClient.getInstance().world.getBlockState(new BlockPos(-162,121,-259)));
         return 1;
     }
 

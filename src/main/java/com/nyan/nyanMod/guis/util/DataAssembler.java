@@ -1,5 +1,6 @@
 package com.nyan.nyanMod.guis.util;
 
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -49,13 +50,28 @@ public class DataAssembler {
                              LightType.BLOCK,
                              new BlockPos(x,y+1,z)
                      ) <=light;
-                     boolean isAirAbove = client.world.getBlockState(
-                             new BlockPos(x,y+1,z)).isAir()&&client.world.getBlockState(
-                                     new BlockPos(x,y+2,z)).isAir();
+                     Block block1 = client.world.getBlockState(new BlockPos(x,y+1,z)).getBlock();
+                     Block block2 = client.world.getBlockState(new BlockPos(x,y+2,z)).getBlock();
+                     boolean block1IsPlant = (block1 instanceof PlantBlock)||(block1 instanceof AbstractPlantStemBlock)
+                             ||(block1 instanceof AbstractPlantPartBlock);
+                     boolean block1IsSnow = false;
+                     if(block1 instanceof  SnowBlock){
+                         block1IsSnow=Integer.parseInt(client.world.getBlockState(new BlockPos(x,y+1,z)).toString().split("=")[1].replaceAll("]",""))<=1;
+                     }
+
+//                     boolean block1IsSnow = (block1 instanceof SnowBlock)?
+//                             Integer.parseInt(client.world.getBlockState(new BlockPos(x,y+1,z)).toString().split("=")[1]
+//                                     .replaceAll("]",""))<=1:false;
+                     boolean block2IsPlant = (block2 instanceof PlantBlock)||(block2 instanceof AbstractPlantStemBlock)
+                             ||(block2 instanceof AbstractPlantPartBlock);
+                     boolean isAirAbove = ((client.world.getBlockState(
+                             new BlockPos(x,y+1,z)).isAir()||block1IsPlant||block1IsSnow)
+                             &&(client.world.getBlockState(
+                                     new BlockPos(x,y+2,z)).isAir()||block2IsPlant));
 
                      if(isSpawnable && isAirAbove&&isLuminate){
 
-                         returned.add((client.world.getBlockState(new BlockPos(x,y,z)).getBlock().toString().substring(6,client.world.getBlockState(new BlockPos(x,y,z)).getBlock().toString().length()-1)+" "+x+" "+y+" "+z));
+                         returned.add((client.world.getBlockState(new BlockPos(x,y,z)).getBlock().toString().substring(16,client.world.getBlockState(new BlockPos(x,y,z)).getBlock().toString().length()-1)+" "+x+" "+y+" "+z));
                      }
 
                  }
@@ -63,17 +79,16 @@ public class DataAssembler {
 
          }
      }
-        long nowTime = System.currentTimeMillis();
-        System.out.println(prevTime-nowTime);
      return returned;
 
     }
-    public static ArrayList<String> entityData(MinecraftClient client){
+    public static ArrayList<String> entityData(MinecraftClient client,String filter){
         ArrayList<String> returned = new ArrayList<>();
         for(Entity currEntity: client.world.getEntities()){
             String ans = "";
             ans+=""+client.player.getPos().distanceTo(currEntity.getPos())+" ";
             String type = currEntity.getType().toString().substring(17,currEntity.getType().toString().length());
+            if(filter.equals("all")||filter.equals(type)){
             switch(type){
                 case("player"):
                     type = ((PlayerEntity)currEntity).getName().toString().split("\'")[1];
@@ -89,9 +104,10 @@ public class DataAssembler {
             if(currEntity instanceof PlayerEntity){
                 ans+=" "+ ((PlayerEntity) currEntity).getHealth();
             }
-            returned.add(ans);
+            returned.add(ans);}
+            }
 
-        }
+
         Collections.sort(returned);
         return  returned;
 
