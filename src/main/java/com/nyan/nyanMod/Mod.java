@@ -9,12 +9,16 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.block.SnowyBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class Mod implements ModInitializer {
 
@@ -31,7 +35,6 @@ public class Mod implements ModInitializer {
 
         MinecraftClient.getInstance().currentScreen.onClose();
         MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(new MainGui())));
-        System.out.println(MinecraftClient.getInstance().world.getBlockState(new BlockPos(-162,121,-259)));
         return 1;
     }
 

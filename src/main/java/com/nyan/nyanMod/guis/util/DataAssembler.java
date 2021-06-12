@@ -2,6 +2,7 @@ package com.nyan.nyanMod.guis.util;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,10 +15,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.chunk.WorldChunk;
 import org.lwjgl.system.CallbackI;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 public class DataAssembler {
     public static ArrayList<String> blockData(MinecraftClient client,int distance, int light){
@@ -40,7 +38,7 @@ public class DataAssembler {
 
                  if(Math.sqrt((x-playerPos.x)*(x-playerPos.x)
                          +(y-playerPos.y)*(y-playerPos.y)
-                         +(z-playerPos.z)*(z-playerPos.z)) <distance) {
+                         +(z-playerPos.z)*(z-playerPos.z)) <=distance) {
 
                      boolean isSpawnable = client.world.getBlockState(
                              new BlockPos(x,y,z)).allowsSpawning(client.world.getExistingChunk(x/8,z/8),
@@ -111,6 +109,42 @@ public class DataAssembler {
         Collections.sort(returned);
         return  returned;
 
+    }
+    public static ArrayList<String> bEntityData(MinecraftClient client,String filter){
+        ArrayList<String> returned = new ArrayList<>();
+        List<BlockEntity> bEntities = client.world.blockEntities;
+        for(BlockEntity currEntity:bEntities){
+            String ans = "";
+            ans+= client.player.getPos().distanceTo(new Vec3d(
+                    (double)currEntity.getPos().getX(),
+                    (double)currEntity.getPos().getY(),
+                    (double)currEntity.getPos().getZ()));
+
+            String eName = "";
+            eName= currEntity.toString().replaceAll("net.minecraft.block.entity.","")
+                    .split("@")[0].replaceAll("BlockEntity","");
+            if(eName.equals("MobSpawner")){
+                eName+=((MobSpawnerBlockEntity)currEntity).getLogic().getRenderedEntity().toString()
+                        .replaceAll("Entity","#").split("#")[0];
+
+            }
+            ans+=" "+eName;
+            ans+=" "+currEntity.getPos().getX()+" "+currEntity.getPos().getY()+" "+currEntity.getPos().getZ();
+            System.out.println(ans);
+            returned.add(ans);
+        }
+        System.out.println(returned.size());
+        Collections.sort(returned);
+        ArrayList<String> returnedFinal = new ArrayList<>();
+        for(String s :returned){
+            String s1 = "";
+            for(int i =1;i<s.split(" ").length;i++){
+                s1 += s.split(" ")[i]+" ";
+            }
+            System.out.println(s1);
+            returnedFinal.add(s1);
+        }
+        return returnedFinal;
     }
     public static int compare2String(String o1,String o2,int x,int y,int z){
         int x1 = Integer.parseInt(o1.split(" ")[2]);
