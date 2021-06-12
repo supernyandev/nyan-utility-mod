@@ -1,5 +1,6 @@
 package com.nyan.nyanMod.guis.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
@@ -81,10 +82,10 @@ public class DataAssembler {
 
     }
     public static ArrayList<String> entityData(MinecraftClient client,String filter){
-        ArrayList<String> returned = new ArrayList<>();
+        ArrayList<String[]> returned = new ArrayList<>();
         for(Entity currEntity: client.world.getEntities()){
             String ans = "";
-            ans+=""+client.player.getPos().distanceTo(currEntity.getPos())+" ";
+            ans+=""+(int)client.player.getPos().distanceTo(currEntity.getPos())+" ";
             String type = currEntity.getType().toString().substring(17,currEntity.getType().toString().length());
             if(filter.equals("all")||filter.equals(type)){
             switch(type){
@@ -102,20 +103,32 @@ public class DataAssembler {
             if(currEntity instanceof PlayerEntity){
                 ans+=" "+ ((PlayerEntity) currEntity).getHealth();
             }
-            returned.add(ans);}
+            returned.add(ans.split(" "));}
             }
 
 
-        Collections.sort(returned);
-        return  returned;
+        returned.sort((o1,o2)->{
+            return Integer.parseInt(o1[0])-Integer.parseInt(o2[0]);
+        });
+        ArrayList<String> returnedFinal = new ArrayList<>();
+        for(String[] s :returned){
+            String s1 = "";
+            for(int i =1;i<s.length;i++){
+                s1 += s[i]+" ";
+            }
+            System.out.println(s1);
+            returnedFinal.add(s1);
+        }
+        return returnedFinal;
 
     }
     public static ArrayList<String> bEntityData(MinecraftClient client,String filter){
-        ArrayList<String> returned = new ArrayList<>();
+        ArrayList<String[]> returned = new ArrayList<>();
         List<BlockEntity> bEntities = client.world.blockEntities;
         for(BlockEntity currEntity:bEntities){
+
             String ans = "";
-            ans+= client.player.getPos().distanceTo(new Vec3d(
+            ans+= (int)client.player.getPos().distanceTo(new Vec3d(
                     (double)currEntity.getPos().getX(),
                     (double)currEntity.getPos().getY(),
                     (double)currEntity.getPos().getZ()));
@@ -123,6 +136,7 @@ public class DataAssembler {
             String eName = "";
             eName= currEntity.toString().replaceAll("net.minecraft.block.entity.","")
                     .split("@")[0].replaceAll("BlockEntity","");
+            if(eName.toLowerCase().equals(filter.toLowerCase())||filter.equals("all")){
             if(eName.equals("MobSpawner")){
                 eName+=((MobSpawnerBlockEntity)currEntity).getLogic().getRenderedEntity().toString()
                         .replaceAll("Entity","#").split("#")[0];
@@ -131,15 +145,17 @@ public class DataAssembler {
             ans+=" "+eName;
             ans+=" "+currEntity.getPos().getX()+" "+currEntity.getPos().getY()+" "+currEntity.getPos().getZ();
             System.out.println(ans);
-            returned.add(ans);
+            returned.add(ans.split(" "));}
         }
         System.out.println(returned.size());
-        Collections.sort(returned);
+        returned.sort((o1,o2)->{
+            return Integer.parseInt(o1[0])-Integer.parseInt(o2[0]);
+        });
         ArrayList<String> returnedFinal = new ArrayList<>();
-        for(String s :returned){
+        for(String[] s :returned){
             String s1 = "";
-            for(int i =1;i<s.split(" ").length;i++){
-                s1 += s.split(" ")[i]+" ";
+            for(int i =1;i<s.length;i++){
+                s1 += s[i]+" ";
             }
             System.out.println(s1);
             returnedFinal.add(s1);

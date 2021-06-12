@@ -36,20 +36,12 @@ public class EntityShowerGui extends LightweightGuiDescription {
         typeField.setHost(this);
 
         BiConsumer<String, PlainEntity> configurator = (String s, PlainEntity destination) -> {
-            String s1 = "";
-            List<String> listStrings= Arrays.asList(s.split(" "));
-            s1+=listStrings.get(1);
-            for(int i =2;i<listStrings.size();i++){
-                s1+=" ";
-                s1 += listStrings.get(i);
 
-            }
-
-            destination.label.setText(s1);
+            destination.label.setText(s);
             destination.label.setHost(this);
             //destination.label.setSize(160,16);
             destination.cost.setText(new LiteralText(""));
-            destination.button.setOnClick(()->{onEntityButtonPressed(s.split(" ")[5]);});
+            destination.button.setOnClick(()->{onEntityButtonPressed(s.split(" ")[4]);});
 
         };
 

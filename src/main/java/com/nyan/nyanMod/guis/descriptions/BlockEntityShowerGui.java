@@ -80,6 +80,6 @@ public class BlockEntityShowerGui extends LightweightGuiDescription {
     private void onTypeButtonPressed(){
         MinecraftClient.getInstance().currentScreen.onClose();
         MinecraftClient.getInstance().send(()->MinecraftClient.getInstance().openScreen(new Screen(
-                new EntityShowerGui(typeField.getText()))));
+                new BlockEntityShowerGui(typeField.getText()))));
     }
 }
